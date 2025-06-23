@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHONY - Session Management Shopping Cart</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="main-title">
+                        <i class="fas fa-user-clock"></i>
+                        CHONY - Session Management
+                    </h1>
+                    <p class="subtitle">HTTP Session Tracking in Shopping Cart Application</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="session-info">
+                        <div class="session-status" id="sessionStatus">
+                            <i class="fas fa-circle text-warning"></i>
+                            <span>Session: Not Active</span>
+                        </div>
+                        <div class="cart-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalog.html">
+                            <i class="fas fa-th-large"></i> Catalog
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="startSession()">
+                            <i class="fas fa-play"></i> Start Session
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="endSession()">
+                            <i class="fas fa-stop"></i> End Session
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2>Welcome to CHONY Session Management</h2>
+                        <p class="lead">Experience the power of HTTP session tracking in a shopping cart application. Your cart data persists across page requests without database writes.</p>
+                        <div class="hero-features">
+                            <div class="feature-item">
+                                <i class="fas fa-server"></i>
+                                <span>HTTP Session Management</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-memory"></i>
+                                <span>In-Memory Cart Storage</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-bolt"></i>
+                                <span>High Performance</span>
+                            </div>
+                        </div>
+                        <div class="hero-buttons">
+                            <a href="catalog.html" class="btn btn-primary btn-lg">
+                                <i class="fas fa-shopping-bag"></i> Browse Products
+                            </a>
+                            <button class="btn btn-outline-primary btn-lg" onclick="startSession()">
+                                <i class="fas fa-play"></i> Start Session
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="hero-image">
+                            <canvas id="sessionCanvas" width="400" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session Management Section -->
+            <div class="session-section">
+                <h3 class="text-center mb-4">Session Management Features</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="session-card">
+                            <div class="session-icon">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <h4>Session Creation</h4>
+                            <p>Automatic session creation when user first visits. Each session gets a unique ID for tracking.</p>
+                            <div class="session-demo">
+                                <button class="btn btn-sm btn-outline-primary" onclick="createSession()">
+                                    Create Session
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="session-card">
+                            <div class="session-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h4>Cart Persistence</h4>
+                            <p>Cart items stored in session memory. Data persists across page requests without database writes.</p>
+                            <div class="session-demo">
+                                <button class="btn btn-sm btn-outline-primary" onclick="addToSessionCart()">
+                                    Add to Session Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="session-card">
+                            <div class="session-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h4>Session Timeout</h4>
+                            <p>Automatic session cleanup after inactivity. Configurable timeout periods for security.</p>
+                            <div class="session-demo">
+                                <button class="btn btn-sm btn-outline-primary" onclick="checkSessionTimeout()">
+                                    Check Timeout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session Information Panel -->
+            <div class="session-info-panel">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-info-circle"></i> Session Information</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <strong>Session ID:</strong>
+                                    <span id="sessionId">Not Created</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Session Status:</strong>
+                                    <span id="sessionStatusText">Inactive</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Creation Time:</strong>
+                                    <span id="sessionCreationTime">-</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <strong>Last Access:</strong>
+                                    <span id="lastAccessTime">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Cart Items:</strong>
+                                    <span id="sessionCartItems">0</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Session Age:</strong>
+                                    <span id="sessionAge">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Details -->
+            <div class="technical-section">
+                <h3 class="text-center mb-4">Technical Implementation</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="tech-card">
+                            <h4><i class="fas fa-code"></i> Servlet Session API</h4>
+                            <ul>
+                                <li>HttpSession interface for session management</li>
+                                <li>Session creation and retrieval</li>
+                                <li>Attribute storage and retrieval</li>
+                                <li>Session timeout configuration</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="tech-card">
+                            <h4><i class="fas fa-database"></i> Performance Benefits</h4>
+                            <ul>
+                                <li>No database writes for cart operations</li>
+                                <li>Faster response times</li>
+                                <li>Reduced server load</li>
+                                <li>Better user experience</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p>&copy; 2024 All rights reserved by CHONY - Session Management Shopping Cart</p>
+                    <p><small>Built with Java Servlet Session API and HTTP Session Management</small></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html> 

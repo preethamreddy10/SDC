@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <!-- CHONY Servlet Shopping Cart Application -->
+    <display-name>CHONY Servlet Shopping Cart</display-name>
+    
+    <!-- Application description -->
+    <description>
+        CHONY Servlet Shopping Cart - Experiment 6
+        MVC Architecture with Java Servlet and MySQL Database
+        Author: Haswinchony Saladi
+        Roll No: 23AG1A0555
+    </description>
+
+    <!-- Servlet Configuration -->
+    <servlet>
+        <servlet-name>ProductServlet</servlet-name>
+        <servlet-class>servlets.ProductServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>ProductServlet</servlet-name>
+        <url-pattern>/products</url-pattern>
+    </servlet-mapping>
+
+    <!-- Welcome File List -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>catalog.html</welcome-file>
+    </welcome-file-list>
+
+    <!-- Session Configuration -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!-- Error Pages -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404.html</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500.html</location>
+    </error-page>
+
+    <!-- Security Configuration -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Protected Resources</web-resource-name>
+            <url-pattern>/WEB-INF/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- MIME Type Mappings -->
+    <mime-mapping>
+        <extension>json</extension>
+        <mime-type>application/json</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>js</extension>
+        <mime-type>application/javascript</mime-type>
+    </mime-mapping>
+
+    <!-- Context Parameters -->
+    <context-param>
+        <param-name>database-url</param-name>
+        <param-value>jdbc:mysql://localhost:3306/shopping_cart</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>database-user</param-name>
+        <param-value>root</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>database-password</param-name>
+        <param-value>password</param-value>
+    </context-param>
+
+    <!-- Application Lifecycle Listener -->
+    <listener>
+        <listener-class>servlets.ApplicationLifecycleListener</listener-class>
+    </listener>
+
+</web-app> 

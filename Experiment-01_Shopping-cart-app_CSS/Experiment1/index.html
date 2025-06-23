@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHONY - World's Best Online eBooks Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/130x100/FF0000/FFFFFF?text=CHONY" alt="CHONY LOGO">
+            </div>
+            <div class="title">
+                <h1>CHONY - WORLD'S BEST ONLINE EBOOKS WEBSITE</h1>
+            </div>
+            <div class="search-container">
+                <input type="text" placeholder="Search for books...">
+                <button type="submit">Search</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Menu -->
+    <nav>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="registration.html">Registration</a></li>
+            <li><a href="cart.html">Cart</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="hero-section">
+            <h2>Welcome to CHONY eBook Store</h2>
+            <p>Discover thousands of digital books at amazing prices!</p>
+            <a href="#featured-books" class="cta-button">Explore Books</a>
+        </div>
+
+        <section id="featured-books" class="books-section">
+            <h3>Featured Books</h3>
+            <div class="books-grid">
+                <div class="book-card">
+                    <img src="https://via.placeholder.com/200x250/FF0000/FFFFFF?text=Java" alt="Java Programming">
+                    <h4>Java Programming</h4>
+                    <p class="author">By John Smith</p>
+                    <p class="price">Rs. 2300/-</p>
+                    <button class="add-to-cart" onclick="addToCart('Java Programming', 2300)">Add to Cart</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://via.placeholder.com/200x250/00FF00/FFFFFF?text=Python" alt="Python Basics">
+                    <h4>Python Basics</h4>
+                    <p class="author">By Jane Doe</p>
+                    <p class="price">Rs. 1800/-</p>
+                    <button class="add-to-cart" onclick="addToCart('Python Basics', 1800)">Add to Cart</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://via.placeholder.com/200x250/0000FF/FFFFFF?text=WebDev" alt="Web Development">
+                    <h4>Web Development</h4>
+                    <p class="author">By Mike Johnson</p>
+                    <p class="price">Rs. 2500/-</p>
+                    <button class="add-to-cart" onclick="addToCart('Web Development', 2500)">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="categories-section">
+            <h3>Book Categories</h3>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <h4>Programming</h4>
+                    <p>Learn coding languages and frameworks</p>
+                </div>
+                <div class="category-card">
+                    <h4>Fiction</h4>
+                    <p>Explore imaginative stories and novels</p>
+                </div>
+                <div class="category-card">
+                    <h4>Non-Fiction</h4>
+                    <p>Educational and informative content</p>
+                </div>
+                <div class="category-card">
+                    <h4>Academic</h4>
+                    <p>Textbooks and study materials</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 All rights reserved by CHONY eBooks</p>
+    </footer>
+
+    <script>
+        function addToCart(bookName, price) {
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            
+            // Check if item already exists in cart
+            const existingItem = cartItems.find(item => item.title === bookName);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                const newItem = {
+                    id: Date.now(), // Simple ID generation
+                    title: bookName,
+                    author: 'Unknown Author', // Placeholder, can be improved
+                    price: price,
+                    quantity: 1,
+                    image: `https://via.placeholder.com/200x250/${Math.floor(Math.random()*16777215).toString(16)}/FFFFFF?text=${bookName.substring(0,3)}`
+                };
+                cartItems.push(newItem);
+            }
+            
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            alert(`Added "${bookName}" to cart!`);
+        }
+    </script>
+</body>
+</html> 

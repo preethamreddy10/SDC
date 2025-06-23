@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - CHONY eBook Store</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cart-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .cart-header {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .cart-table th,
+        .cart-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .cart-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .cart-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .book-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .book-image {
+            width: 60px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .book-details h4 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .book-details p {
+            margin: 0.2rem 0 0 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quantity-btn {
+            background: #ff0000;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .quantity-btn:hover {
+            background: #cc0000;
+        }
+        
+        .quantity-display {
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .remove-btn:hover {
+            background: #c82333;
+        }
+        
+        .cart-summary {
+            background-color: #f8f9fa;
+            padding: 2rem;
+            border-top: 2px solid #ddd;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .summary-row.total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ff0000;
+            border-top: 2px solid #ddd;
+            padding-top: 1rem;
+        }
+        
+        .checkout-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .checkout-btn:hover {
+            background: #218838;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .empty-cart h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .continue-shopping {
+            background: #ff0000;
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .continue-shopping:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/130x100/FF0000/FFFFFF?text=CHONY" alt="CHONY LOGO">
+            </div>
+            <div class="title">
+                <h1>CHONY - WORLD'S BEST ONLINE EBOOKS WEBSITE</h1>
+            </div>
+            <div class="search-container">
+                <input type="text" placeholder="Search for books...">
+                <button type="submit">Search</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Menu -->
+    <nav>
+        <ul class="nav-menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="registration.html">Registration</a></li>
+            <li><a href="cart.html" class="active">Cart</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="cart-container">
+            <div class="cart-header">
+                <h2>Your Shopping Cart</h2>
+                <p id="cart-count">0 items in cart</p>
+            </div>
+            
+            <div id="cart-content">
+                <!-- Cart items will be dynamically loaded here -->
+            </div>
+            
+            <div class="cart-summary" id="cart-summary" style="display: none;">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">Rs. 0/-</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax (18%):</span>
+                    <span id="tax">Rs. 0/-</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span>Rs. 100/-</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="total">Rs. 0/-</span>
+                </div>
+                
+                <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 All rights reserved by CHONY eBooks</p>
+    </footer>
+
+    <script>
+        // Load cart items from localStorage or use sample data
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [
+            {
+                id: 1,
+                title: 'Java Programming',
+                author: 'John Smith',
+                price: 2300,
+                quantity: 2,
+                image: 'https://via.placeholder.com/200x250/FF0000/FFFFFF?text=Java'
+            },
+            {
+                id: 2,
+                title: 'Python Basics',
+                author: 'Jane Doe',
+                price: 1800,
+                quantity: 1,
+                image: 'https://via.placeholder.com/200x250/00FF00/FFFFFF?text=Python'
+            }
+        ];
+
+        // Initialize cart on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartDisplay();
+        });
+
+        function saveCart() {
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        }
+
+        function updateCartDisplay() {
+            const cartContent = document.getElementById('cart-content');
+            const cartSummary = document.getElementById('cart-summary');
+            const cartCount = document.getElementById('cart-count');
+            
+            if (cartItems.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart">
+                        <h3>Your cart is empty</h3>
+                        <p>Looks like you haven't added any books to your cart yet.</p>
+                        <a href="index.html" class="continue-shopping">Continue Shopping</a>
+                    </div>
+                `;
+                cartSummary.style.display = 'none';
+                cartCount.textContent = '0 items in cart';
+            } else {
+                displayCartItems();
+                updateCartSummary();
+                cartCount.textContent = `${getCartItemCount()} item${getCartItemCount() > 1 ? 's' : ''} in cart`;
+            }
+        }
+
+        function displayCartItems() {
+            const cartContent = document.getElementById('cart-content');
+            
+            let cartHTML = `
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            cartItems.forEach(item => {
+                cartHTML += `
+                    <tr>
+                        <td>
+                            <div class="book-info">
+                                <img src="${item.image}" alt="${item.title}" class="book-image">
+                                <div class="book-details">
+                                    <h4>${item.title}</h4>
+                                    <p>By ${item.author}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>Rs. ${item.price}/-</td>
+                        <td>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span class="quantity-display">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            </div>
+                        </td>
+                        <td>Rs. ${item.price * item.quantity}/-</td>
+                        <td>
+                            <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            cartHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            cartContent.innerHTML = cartHTML;
+            document.getElementById('cart-summary').style.display = 'block';
+        }
+
+        function updateQuantity(itemId, change) {
+            const item = cartItems.find(item => item.id === itemId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeItem(itemId);
+                } else {
+                    saveCart();
+                    updateCartDisplay();
+                }
+            }
+        }
+
+        function removeItem(itemId) {
+            cartItems = cartItems.filter(item => item.id !== itemId);
+            saveCart();
+            updateCartDisplay();
+        }
+
+        function updateCartSummary() {
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.18;
+            const shipping = 100;
+            const total = subtotal + tax + shipping;
+            
+            document.getElementById('subtotal').textContent = `Rs. ${subtotal}/-`;
+            document.getElementById('tax').textContent = `Rs. ${Math.round(tax)}/-`;
+            document.getElementById('total').textContent = `Rs. ${Math.round(total)}/-`;
+        }
+
+        function getCartItemCount() {
+            return cartItems.reduce((total, item) => total + item.quantity, 0);
+        }
+
+        function checkout() {
+            const total = document.getElementById('total').textContent;
+            alert(`Proceeding to checkout with total: ${total}\n\nIn a real application, this would redirect to a payment gateway.`);
+            cartItems = [];
+            saveCart();
+            updateCartDisplay();
+        }
+
+        // Function to add items to cart (called from other pages)
+        function addToCart(bookName, price) {
+            // Check if item already exists in cart
+            const existingItem = cartItems.find(item => item.title === bookName);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                const newItem = {
+                    id: Date.now(), // Simple ID generation
+                    title: bookName,
+                    author: 'Unknown Author',
+                    price: price,
+                    quantity: 1,
+                    image: `https://via.placeholder.com/200x250/${Math.floor(Math.random()*16777215).toString(16)}/FFFFFF?text=${bookName.substring(0, 3)}`
+                };
+                cartItems.push(newItem);
+            }
+            
+            saveCart();
+            updateCartDisplay();
+            alert(`Added "${bookName}" to cart!`);
+        }
+    </script>
+</body>
+</html> 

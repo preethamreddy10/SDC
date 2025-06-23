@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - CHONY eBook Store</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .registration-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ff0000;
+        }
+        
+        .register-btn {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .register-btn:hover {
+            background-color: #cc0000;
+        }
+        
+        .error-message {
+            color: #ff0000;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .success-message {
+            color: #28a745;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .strength-weak { color: #ff0000; }
+        .strength-medium { color: #ffa500; }
+        .strength-strong { color: #28a745; }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/130x100/FF0000/FFFFFF?text=CHONY" alt="CHONY LOGO">
+            </div>
+            <div class="title">
+                <h1>CHONY - WORLD'S BEST ONLINE EBOOKS WEBSITE</h1>
+            </div>
+            <div class="search-container">
+                <input type="text" placeholder="Search for books...">
+                <button type="submit">Search</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Menu -->
+    <nav>
+        <ul class="nav-menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="registration.html" class="active">Registration</a></li>
+            <li><a href="cart.html">Cart</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="registration-container">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #333;">Create Your Account</h2>
+            
+            <form class="registration-form" id="registrationForm" onsubmit="return validateRegistration(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" placeholder="Enter first name" required>
+                        <div class="error-message" id="firstNameError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" placeholder="Enter last name" required>
+                        <div class="error-message" id="lastNameError"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
+                    <div class="error-message" id="phoneError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dateOfBirth">Date of Birth</label>
+                    <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                    <div class="error-message" id="dateOfBirthError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <div class="error-message" id="genderError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter password" required onkeyup="checkPasswordStrength()">
+                    <div class="password-strength" id="passwordStrength"></div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        I agree to the <a href="#" style="color: #ff0000;">Terms and Conditions</a>
+                    </label>
+                    <div class="error-message" id="termsError"></div>
+                </div>
+                
+                <button type="submit" class="register-btn">Create Account</button>
+                
+                <div class="success-message" id="successMessage"></div>
+            </form>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <p>Already have an account? <a href="login.html" style="color: #ff0000; text-decoration: none;">Login here</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 All rights reserved by CHONY eBooks</p>
+    </footer>
+
+    <script>
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthDiv = document.getElementById('passwordStrength');
+            
+            let strength = 0;
+            let feedback = '';
+            
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            if (strength < 3) {
+                feedback = 'Weak password';
+                strengthDiv.className = 'password-strength strength-weak';
+            } else if (strength < 5) {
+                feedback = 'Medium strength password';
+                strengthDiv.className = 'password-strength strength-medium';
+            } else {
+                feedback = 'Strong password';
+                strengthDiv.className = 'password-strength strength-strong';
+            }
+            
+            strengthDiv.textContent = feedback;
+        }
+        
+        function validateRegistration(event) {
+            event.preventDefault();
+            
+            // Reset error messages
+            const errorElements = document.querySelectorAll('.error-message');
+            errorElements.forEach(element => element.textContent = '');
+            document.getElementById('successMessage').textContent = '';
+            
+            const formData = new FormData(event.target);
+            let isValid = true;
+            
+            // First Name validation
+            const firstName = formData.get('firstName');
+            if (firstName.length < 2) {
+                document.getElementById('firstNameError').textContent = 'First name must be at least 2 characters';
+                isValid = false;
+            }
+            
+            // Last Name validation
+            const lastName = formData.get('lastName');
+            if (lastName.length < 2) {
+                document.getElementById('lastNameError').textContent = 'Last name must be at least 2 characters';
+                isValid = false;
+            }
+            
+            // Email validation
+            const email = formData.get('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email address';
+                isValid = false;
+            }
+            
+            // Phone validation
+            const phone = formData.get('phone');
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(phone)) {
+                document.getElementById('phoneError').textContent = 'Please enter a valid 10-digit phone number';
+                isValid = false;
+            }
+            
+            // Date of Birth validation
+            const dateOfBirth = formData.get('dateOfBirth');
+            const today = new Date();
+            const birthDate = new Date(dateOfBirth);
+            const age = today.getFullYear() - birthDate.getFullYear();
+            if (age < 13) {
+                document.getElementById('dateOfBirthError').textContent = 'You must be at least 13 years old';
+                isValid = false;
+            }
+            
+            // Gender validation
+            const gender = formData.get('gender');
+            if (!gender) {
+                document.getElementById('genderError').textContent = 'Please select your gender';
+                isValid = false;
+            }
+            
+            // Password validation
+            const password = formData.get('password');
+            if (password.length < 8) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long';
+                isValid = false;
+            }
+            
+            // Confirm Password validation
+            const confirmPassword = formData.get('confirmPassword');
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+                isValid = false;
+            }
+            
+            // Terms validation
+            const terms = formData.get('terms');
+            if (!terms) {
+                document.getElementById('termsError').textContent = 'You must agree to the terms and conditions';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Simulate registration process
+                document.getElementById('successMessage').textContent = 'Registration successful! Redirecting to login...';
+                
+                // In a real application, you would send the data to a server
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+            
+            return false;
+        }
+    </script>
+</body>
+</html> 

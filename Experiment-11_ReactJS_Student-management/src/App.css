@@ -1,0 +1,97 @@
+/* CHONY Experiment 11 - App CSS */
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+}
+
+.chony-header {
+  background: var(--chony-black);
+  border-bottom: 2px solid var(--chony-red);
+  padding: 0;
+  box-shadow: 0 2px 12px var(--chony-shadow);
+}
+
+.header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.chony-logo {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--chony-red);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.chony-sub {
+  font-size: 1rem;
+  color: var(--chony-light-gray);
+  font-weight: 400;
+  margin-top: 2px;
+  letter-spacing: 1px;
+}
+
+.nav-list {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.nav-link {
+  color: var(--chony-white);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nav-link:hover, .nav-link.active {
+  background: var(--chony-red);
+  color: var(--chony-white);
+}
+
+.main-content {
+  flex: 1 1 auto;
+  padding: 40px 0 30px 0;
+  min-height: 60vh;
+}
+
+.chony-footer {
+  background: var(--chony-black);
+  color: var(--chony-light-gray);
+  padding: 18px 0 12px 0;
+  font-size: 1rem;
+  border-top: 2px solid var(--chony-red);
+  box-shadow: 0 -2px 12px var(--chony-shadow);
+}
+
+@media (max-width: 768px) {
+  .header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .main-content {
+    padding: 24px 0 20px 0;
+  }
+  .nav-list {
+    gap: 12px;
+  }
+  .chony-logo {
+    font-size: 1.5rem;
+  }
+} 

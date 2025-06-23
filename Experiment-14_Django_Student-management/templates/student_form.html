@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if student %}Edit {{ student.full_name }}{% else %}Add Student{% endif %} - CHONY Student Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3 class="mb-0" style="color: var(--chony-red);">
+                    <i class="fas fa-{% if student %}edit{% else %}plus{% endif %} me-2"></i>
+                    {% if student %}Edit Student{% else %}Add New Student{% endif %}
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.first_name|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.last_name|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.roll_number|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.phone|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.date_of_birth|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ form.department|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form.year|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form.semester|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.gender|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.cgpa|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    {{ form.address|as_crispy_field }}
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'student_list' %}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-arrow-left me-2"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>
+                            {% if student %}Update Student{% else %}Add Student{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        {% if student %}
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-info-circle me-2"></i>Student Information
+                </h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Created:</strong> {{ student.created_at|date:"F j, Y" }}</p>
+                        <p><strong>Last Updated:</strong> {{ student.updated_at|date:"F j, Y" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Created By:</strong> {{ student.created_by.username }}</p>
+                        <p><strong>Student ID:</strong> {{ student.id }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

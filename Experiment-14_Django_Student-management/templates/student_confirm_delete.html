@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete {{ student.full_name }} - CHONY Student Management{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3 class="mb-0" style="color: var(--chony-red);">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion
+                </h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="alert alert-danger">
+                    <h5 class="alert-heading">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Warning!
+                    </h5>
+                    <p class="mb-0">
+                        You are about to delete the student <strong>{{ student.full_name }}</strong> ({{ student.roll_number }}).
+                        This action cannot be undone.
+                    </p>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>Student Information</h5>
+                        <div class="row text-start">
+                            <div class="col-md-6">
+                                <p><strong>Name:</strong> {{ student.full_name }}</p>
+                                <p><strong>Roll Number:</strong> {{ student.roll_number }}</p>
+                                <p><strong>Department:</strong> {{ student.department_full_name }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Year:</strong> {{ student.year_name }}</p>
+                                <p><strong>Email:</strong> {{ student.email }}</p>
+                                <p><strong>CGPA:</strong> {% if student.cgpa %}{{ student.cgpa }}{% else %}N/A{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{% url 'student_detail' student.id %}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-arrow-left me-2"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-2"></i>Delete Student
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-info-circle me-2"></i>What happens when you delete a student?
+                </h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-times text-danger me-2"></i>
+                        All student data will be permanently removed
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-times text-danger me-2"></i>
+                        Academic records will be lost
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-times text-danger me-2"></i>
+                        This action cannot be undone
+                    </li>
+                    <li>
+                        <i class="fas fa-info text-info me-2"></i>
+                        Consider archiving instead of deleting
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

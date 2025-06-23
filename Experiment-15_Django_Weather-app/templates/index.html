@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --chony-red: #ff4757;
+            --chony-dark-red: #c44569;
+            --chony-black: #1a1a1a;
+            --chony-gray: #2d2d2d;
+            --chony-white: #ffffff;
+            --chony-text: #e0e0e0;
+            --weather-blue: #4facfe;
+            --weather-purple: #00f2fe;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--weather-blue) 0%, var(--weather-purple) 100%);
+            min-height: 100vh;
+            color: var(--chony-text);
+        }
+        
+        .navbar-brand {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--chony-red) !important;
+            letter-spacing: 2px;
+        }
+        
+        .navbar {
+            background: rgba(0, 0, 0, 0.3) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--chony-red);
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+        }
+        
+        .weather-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .temperature-display {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--chony-white);
+            margin: 20px 0;
+        }
+        
+        .weather-icon {
+            font-size: 3rem;
+            margin: 20px 0;
+        }
+        
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .detail-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .detail-item i {
+            font-size: 1.5rem;
+            color: var(--chony-red);
+            margin-bottom: 8px;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .search-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--chony-white);
+            border-radius: 8px;
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--chony-red);
+            color: var(--chony-white);
+            box-shadow: 0 0 0 0.2rem rgba(255, 71, 87, 0.25);
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--chony-red) 0%, var(--chony-dark-red) 100%);
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 2px solid var(--chony-red);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+        
+        .historical-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .historical-item .day-name {
+            font-weight: 600;
+            color: var(--chony-white);
+        }
+        
+        .historical-item .temp {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--chony-red);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-cloud-sun me-2"></i>CHONY Weather
+            </a>
+            
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text">
+                    <i class="fas fa-map-marker-alt me-1"></i>{{ city }}
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Search Form -->
+        <div class="search-form">
+            <form method="get" class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" name="city" class="form-control" placeholder="Enter city name..." value="{{ city }}">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>Get Weather
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Current Weather -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="weather-card">
+                    <h2 class="mb-4">
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ current_weather.city }}
+                    </h2>
+                    
+                    <div class="weather-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    
+                    <div class="temperature-display">
+                        {{ current_weather.temperature }}°C
+                    </div>
+                    
+                    <h4 class="mb-3">{{ current_weather.description }}</h4>
+                    
+                    <div class="weather-details">
+                        <div class="detail-item">
+                            <i class="fas fa-thermometer-half"></i>
+                            <div>Feels Like</div>
+                            <strong>{{ current_weather.feels_like }}°C</strong>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <i class="fas fa-tint"></i>
+                            <div>Humidity</div>
+                            <strong>{{ current_weather.humidity }}%</strong>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <div>Pressure</div>
+                            <strong>{{ current_weather.pressure }} hPa</strong>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <i class="fas fa-wind"></i>
+                            <div>Wind Speed</div>
+                            <strong>{{ current_weather.wind_speed }} m/s</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-calendar-alt me-2"></i>Past 5 Days
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% for day in historical_weather %}
+                        <div class="historical-item">
+                            <div class="day-name">{{ day.day_name }}</div>
+                            <div class="temp">{{ day.temperature }}°C</div>
+                            <div class="description">{{ day.description }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Temperature Chart -->
+        <div class="chart-container">
+            <h4 class="mb-3">
+                <i class="fas fa-chart-line me-2"></i>Temperature Trend (Past 5 Days)
+            </h4>
+            <canvas id="temperatureChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <p class="mb-0">
+                © 2024 CHONY Weather App | 
+                Haswinchony Saladi (23AG1A0555) | 
+                <i class="fas fa-cloud text-info"></i> Powered by Django & Chart.js
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Chart.js Configuration -->
+    <script>
+        // Chart data from Django context
+        const chartData = {{ chart_data|safe }};
+        
+        // Create temperature chart
+        const ctx = document.getElementById('temperatureChart').getContext('2d');
+        const temperatureChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: chartData.labels,
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: chartData.temperatures,
+                    borderColor: '#ff4757',
+                    backgroundColor: 'rgba(255, 71, 87, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#ff4757',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#ffffff',
+                            font: {
+                                size: 14,
+                                family: 'Inter'
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#ffffff',
+                            font: {
+                                size: 12,
+                                family: 'Inter'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#ffffff',
+                            font: {
+                                size: 12,
+                                family: 'Inter'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Auto-refresh weather data every 5 minutes
+        setInterval(function() {
+            fetch('/api/weather/?city={{ city }}')
+                .then(response => response.json())
+                .then(data => {
+                    // Update current weather display
+                    document.querySelector('.temperature-display').textContent = data.current.temperature + '°C';
+                    document.querySelector('h4').textContent = data.current.description;
+                    
+                    // Update chart data
+                    temperatureChart.data.labels = data.chart_data.labels;
+                    temperatureChart.data.datasets[0].data = data.chart_data.temperatures;
+                    temperatureChart.update();
+                })
+                .catch(error => console.error('Error fetching weather data:', error));
+        }, 300000); // 5 minutes
+    </script>
+</body>
+</html> 
